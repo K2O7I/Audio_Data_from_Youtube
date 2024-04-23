@@ -1,0 +1,10 @@
+yt_dlp
+pydub 
+SpeechRecognition 
+ffmpeg 
+ffprobe
+spleeter
+transformers
+accelerate
+tensorflow==2.15
+pyannote.audio
