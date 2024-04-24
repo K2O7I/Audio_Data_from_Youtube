@@ -7,7 +7,7 @@
 1. **About.**\
    This is the program used to download audio data from YouTube and label it.\
    The data from this program could be applied for Automatic Speech Recognition (ASR) and Text-to-speech (T2S) tasks.\
-   This program collects YouTube audio by its ID. The videoID.txt has the following structure:\
+   This program collects YouTube audio by its ID. The <videoID.txt> has the following structure:\
      <br>
      ID0001<br>
      ID0002<br>
