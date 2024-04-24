@@ -11,7 +11,7 @@
      ID0001<br>
      ID0002<br>
      ...<br>
-   This program currently utilizes OpenAI Whisper-v3 and Pyannote-segmentation-3.0.
+   This program currently utilizes OpenAI Whisper-v3 and Pyannote-segmentation-3.0.\
    *The audio from YouTube may contain **copyright**. The author of this code will not be responsible for any violation of the data collected from this program.*
 3. **How to run.**
    - Step 1:\
