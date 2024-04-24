@@ -29,11 +29,11 @@
      * The **result_wav** folder.
      * The **caption.txt** text file.\ This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
 4. **Future update.**
-    - ( [ ] ) Multi-threaded running.
-    - ( [ ] ) Option to choose other AI models.
-    - ( [ ] ) Automatically correct caption spelling.
-    - ( [ ] ) Boots up speed.
-    - ( [ ] ) Auto push result to Huggingface dataset.
+    - [ ] Multi-threaded running.
+    - [ ] Option to choose other AI models.
+    - [ ] Automatically correct caption spelling.
+    - [ ] Boots up speed.
+    - [ ] Auto push result to Huggingface dataset.
 5. **Reference.**
    * OpenAI/[Whisper-Large-v3](https://huggingface.co/openai/whisper-large-v3).
    * Pyannote/[Segmentation 3.0](https://huggingface.co/pyannote/segmentation-3.0).
