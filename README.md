@@ -1,7 +1,7 @@
 # ASR_Data_from_Youtube
 ***
 #### Author: Nguyen Minh Quan.
-from DataStudio Project.
+-This program is a part of DataStudio Project.-
 #### Version 1.0.0
 ---
 1. **About.**\
