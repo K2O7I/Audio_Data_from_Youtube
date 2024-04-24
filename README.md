@@ -27,7 +27,7 @@
    - Step 6:\
      If you keep the default setup, the result of this program will be found in 2 locations:
      * The **result_wav** folder.
-     * The **caption.txt** text file. (br)--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
+     * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
 4. **Future update.**
     - [ ] Multi-threaded running.
     - [ ] Option to choose other AI models.
