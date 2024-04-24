@@ -20,7 +20,7 @@ import torch
 import logging
 ##################################################################################
 
-class asr_auto_crawling:
+class audio_auto_crawling:
 
   '''
     Audio Book Data Crawling from Youtube for Automatic Speech Recognition (ASR) task.
