@@ -31,6 +31,16 @@
      If you keep the default setup, the result of this program will be found in 2 locations:
      * The **result_wav** folder.
      * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
+   **Sample command in Google Colab:**
+   ```
+   python3 main.py --huggingface_token "hf_1234567890" \
+                 --IDpath "../ids.txt" \
+                 --skip_title "['[Music]', '[Podcast]']" \
+                 --reverse_skip True \
+                 --raw_audio_save_path "/content/raw" \
+                 --result_audio_folder "/content/result_audio_folder" \
+                 --result_caption_path "/content/caption.txt"
+   ```
 4. **Future update.**
     - [ ] Multi-threaded running.
     - [ ] Option to choose other AI models.
