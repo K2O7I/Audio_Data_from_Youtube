@@ -282,7 +282,7 @@ class audio_auto_crawling:
         continue
       if self.return_total_duration: self.count_duration+=(dur)
       # save path
-      return_path=self.result_audio_folder+f'/{idx}'+'|'+f'{str(segment_start_dur+float(start)).replace(".", ":")}'+'|'+f'{str(segment_start_dur+float(end)).replace(".", ":")}.wav'
+      return_path=self.result_audio_folder+f'/{idx}'+':'+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}.wav'
       # audio spliting
       self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
       # write caption
