@@ -5,7 +5,6 @@ import yt_dlp
 import os
 from pydub import AudioSegment
 from tqdm import tqdm
-import speech_recognition as sr
 from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq, pipeline
 import librosa
 import json
