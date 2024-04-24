@@ -23,7 +23,7 @@
    - Step 4:\
     Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
    - Step 5:\
-    `python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath ./videoID.txt`
+    `python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt>`
    - Step 6:\
      If you keep the default setup, the result of this program will be found in 2 locations:
      * The **result_wav** folder.
