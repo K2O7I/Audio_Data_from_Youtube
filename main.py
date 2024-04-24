@@ -1,5 +1,5 @@
 import argparse
-from asr_data_crawling import asr_auto_crawling
+from audio_data_crawling import audio_auto_crawling
 def main():
   parser = argparse.ArgumentParser(description='Youtube Data Crawling')
   parser.add_argument('--huggingface_token', type=str, default="", help='Huggingface_token')
@@ -14,7 +14,7 @@ def main():
   parser.add_argument('--IDpath', type=str, default="./", help='Huggingface_token')
   args = parser.parse_args()
 
-  run=asr_auto_crawling(               
+  run=audio_auto_crawling(               
                args.huggingface_token, 
                args.source_website, 
                args.raw_audio_save_path,
