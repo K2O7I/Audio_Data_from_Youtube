@@ -20,7 +20,7 @@
    - Step 2: \
    `cd Audio_Data_from_Youtube`
    - Step 3:\
-   `pip install -r requirements.txt <br> pip install tensorflow==2.15.0`  
+   `pip install -r requirements.txt` <br> `pip install tensorflow==2.15.0`  
    - Step 4:\
     Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
    - Step 5:\
