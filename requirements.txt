@@ -5,5 +5,4 @@ ffprobe==0.5
 spleeter==2.4.0
 transformers==4.40.0
 accelerate==0.29.3
-tensorflow==2.15.0
 pyannote.audio==3.1.1
