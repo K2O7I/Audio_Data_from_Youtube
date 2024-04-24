@@ -33,7 +33,7 @@
      * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
    <br>
    
-   **Sample command in Google Colab:** \
+   **Sample command in Google Colab:** 
    ```
    python3 main.py --huggingface_token "hf_1234567890" \
                  --IDpath "../ids.txt" \
