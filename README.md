@@ -30,7 +30,8 @@
    - Step 7:\
      If you keep the default setup, the result of this program will be found in 2 locations:
      * The **result_wav** folder.
-     * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*. \
+     * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
+   <br>
    **Sample command in Google Colab:**
    ```
    python3 main.py --huggingface_token "hf_1234567890" \
