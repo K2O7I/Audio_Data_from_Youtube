@@ -1,6 +1,6 @@
 #from youtube_transcript_api import YouTubeTranscriptApi
 import pandas as pd
-from numpy import np
+import numpy as np
 import re
 import yt_dlp
 import os
