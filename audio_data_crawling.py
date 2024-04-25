@@ -233,7 +233,7 @@ class audio_auto_crawling:
       f.writeframes(audio)
     return save_path
     
-  def concatenate_audio(self, first_audio_path, second_audio_path, return_path, blank_duration=1.0):
+  def concatenate_audio(self, first_audio_path, second_audio_path, return_path, blank_duration=0.3):
     blank_audio_path = self.blank_audio(blank_duration)
     infiles=[first_audio_path, blank_audio_path, second_audio_path]
     wave_list=[]
