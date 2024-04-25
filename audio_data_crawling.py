@@ -54,7 +54,7 @@ class audio_auto_crawling:
     self.count_duration=-1.0 # Total duration checkpoint
     self.encoding="utf-8" # Encoding for writting file
     self.min_duration=0.1 # Skip if audio duration shorter than min duration
-    self.min_merge_allow=0.5 # Merge audio with the next one if audio duration shorter than min_merge_allow
+    self.min_merge_allow=1.0 # Merge audio with the next one if audio duration shorter than min_merge_allow
 
   def video_download(self, 
                      id):
