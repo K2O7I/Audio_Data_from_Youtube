@@ -2,7 +2,7 @@
 ***
 #### Author: Nguyen Minh Quan.
 -This program is a part of DataStudio Project.-
-#### Version 1.0.0
+#### Version 1.0.1
 ---
 1. **About.**\
    This is the program used to download audio data from YouTube and label it.\
