@@ -35,7 +35,7 @@ class audio_auto_crawling:
                result_audio_folder='./result_wav',
                skip_title=[],
                reverse_skip=False,
-               return_total_duration=False,
+               return_total_duration=True,
                language='vietnamese',
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
@@ -218,7 +218,34 @@ class audio_auto_crawling:
     if os.path.exists(clear_path+f'{audio_name}'):
       shutil.rmtree(clear_path+f'{audio_name}')
     return clear_path+'temp.wav'
-
+    
+  def blank_audio(self, duration, channel=2, sampwidth=2, save_path="blank.wav"):
+    '''
+      Create blank audio
+    '''
+    zero_array = np.zeros(int(duration*self.default_sampling_rate), dtype = np.float64)
+    audio = np.array([zero_array]*channel).T.astype("<h").tobytes()
+    with wave.open("blank.wav", "w") as f:
+      f.setnchannels(channel)
+      f.setsampwidth(sampwidth)
+      f.setframerate(self.default_sampling_rate)
+      f.writeframes(audio)
+    return save_path
+    
+  def concatenate_audio(self, first_audio_path, second_audio_path, return_path, blank_duration=1.0):
+    blank_audio_path = self.blank_audio(blank_duration)
+    infiles=[first_audio_path, blank_audio_path, second_audio_path]
+    wave_list=[]
+    for infile in infiles:
+        w = wave.open(infile, 'rb')
+        wave_list.append( [w.getparams(), w.readframes(w.getnframes())] )
+        w.close()
+    output = wave.open(return_path, 'wb')
+    output.setparams(wave_list[0][0])
+    for i in range(len(wave_list)):
+        output.writeframes(wave_list[i][1])
+    output.close()
+      
   def get_time(self, text):
     pattern = r'\[\s*(\d{2}:\d{2}:\d{2}\.\d+)\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d+)\]'
     match = re.search(pattern, text)
@@ -269,24 +296,27 @@ class audio_auto_crawling:
     timestamp=segmentation.to_lab().split('\n')[:-1]
     # merge audio if it short than `min_merge_allow`
     previous_start_dur=-1.0
-    
+    previous_end_dur=-1.0
     for i in range(len(timestamp)-skip_last_segment):
       start, end, _ =timestamp[i].split() # Get start, end time of segment
-      
-      if previous_start_dur>-1:
-        start=previous_start_dur
-        previous_start_dur=-1
       dur=float(end)-float(start)
       if self.min_duration>=dur: continue
       # count total duration.
+      if self.return_total_duration: self.count_duration+=dur
       if dur<self.min_merge_allow:
         previous_start_dur=float(start)
+        previous_end_dur=float(end)
         continue
-      if self.return_total_duration: self.count_duration+=(dur)
       # save path
-      return_path=self.result_audio_folder+f'/{idx}'+':'+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}.wav'
+      return_path=self.result_audio_folder+f'/{idx}'+'['+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}].wav'
       # audio spliting
       self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
+      
+      if previous_start_dur>-1:
+        self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
+        previous_end_dur=-1
+        previous_start_dur=-1
+        self.concatenate_audio('short_temp.wav', return_path, return_path)
       # write caption
       audio_content=self.get_caption(return_path)
       self.write_caption(return_path, audio_content)
