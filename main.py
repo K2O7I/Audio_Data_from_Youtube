@@ -21,7 +21,7 @@ def main():
                args.raw_audio_save_path,
                args.result_caption_path,
                args.result_audio_folder,
-               list(args.skip_title),
+               list(eval(args.skip_title)),
                args.reverse_skip,
                args.return_total_duration,
                args.language)
