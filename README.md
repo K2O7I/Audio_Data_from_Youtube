@@ -15,11 +15,11 @@
    This program currently utilizes OpenAI Whisper-v3 and Pyannote-segmentation-3.0.\
    *The audio from YouTube may contain **copyright**. The author of this code will not be responsible for any violation of the data collected from this program.*
 3. **How to run.**
-   - Step 1:
-   if using conda:
+   - Step 1:\
+   if using conda:\
       `conda install ffmpeg`
-   else:
-      `apt install ffmpeg`
+   else:\
+      `apt install ffmpeg`\
      --> Using `whereis ffmpeg` to find *location of ffmpeg*.
    - Step 2:\
    `git clone https://github.com/K2O7I/Audio_Data_from_Youtube.git`
