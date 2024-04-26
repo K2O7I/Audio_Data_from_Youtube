@@ -15,19 +15,25 @@
    This program currently utilizes OpenAI Whisper-v3 and Pyannote-segmentation-3.0.\
    *The audio from YouTube may contain **copyright**. The author of this code will not be responsible for any violation of the data collected from this program.*
 3. **How to run.**
-   - Step 1:\
+   - Step 1:
+   if using conda:
+      `conda install ffmpeg`
+   else:
+      `apt install ffmpeg`
+     --> Using `whereis ffmpeg` to find *location of ffmpeg*.
+   - Step 2:\
    `git clone https://github.com/K2O7I/Audio_Data_from_Youtube.git`
-   - Step 2: \
+   - Step 3: \
    `cd Audio_Data_from_Youtube`
-   - Step 3:\
-   `pip install -r requirements.txt` <br> `pip install tensorflow==2.15.0`  
    - Step 4:\
-    Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
+   `pip install -r requirements.txt` <br> `pip install tensorflow==2.15.0`  
    - Step 5:\
-    Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
+    Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
    - Step 6:\
-    `python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt>`
+    Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
    - Step 7:\
+    `python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt> --ffmpeg_location "<ffmpeg_Location>"`
+   - Step 8:\
      If you keep the default setup, the result of this program will be found in 2 locations:
      * The **result_wav** folder.
      * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
@@ -43,12 +49,12 @@
                  --result_audio_folder "/content/result_audio_folder" \
                  --result_caption_path "/content/caption.txt"
    ```
-4. **Future update.**
+5. **Future update.**
     - [ ] Multi-threaded running.
     - [ ] Option to choose other AI models.
     - [ ] Automatically correct caption spelling.
     - [ ] Boots up speed.
     - [ ] Auto push result to Huggingface dataset.
-5. **Reference.**
+6. **Reference.**
    * OpenAI/[Whisper-Large-v3](https://huggingface.co/openai/whisper-large-v3).
    * Pyannote/[Segmentation 3.0](https://huggingface.co/pyannote/segmentation-3.0).
