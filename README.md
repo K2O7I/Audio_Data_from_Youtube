@@ -17,30 +17,30 @@
 3. **How to run.**
    - Step 1:\
    if using conda:\
-      `conda install ffmpeg`
-   else:\
-      `apt install ffmpeg`\
+      &nbsp;`conda install ffmpeg` \
+   else: \
+      &nbsp;`apt install ffmpeg`\
      --> Using `whereis ffmpeg` to find *location of ffmpeg*.
    - Step 2:\
-   `git clone https://github.com/K2O7I/Audio_Data_from_Youtube.git`
+   &nbsp;`git clone https://github.com/K2O7I/Audio_Data_from_Youtube.git`
    - Step 3: \
-   `cd Audio_Data_from_Youtube`
+   &nbsp;`cd Audio_Data_from_Youtube`
    - Step 4:\
-   `pip install -r requirements.txt` <br> `pip install tensorflow==2.15.0`  
+   &nbsp;`pip install -r requirements.txt` <br> `pip install tensorflow==2.15.0`  
    - Step 5:\
-    Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
+   &nbsp;Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
    - Step 6:\
-    Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
+   &nbsp;Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
    - Step 7:\
-    `python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt> --ffmpeg_location "<ffmpeg_Location>"`
+    &nbsp;`python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt> --ffmpeg_location "<ffmpeg_Location>"`
    - Step 8:\
-     If you keep the default setup, the result of this program will be found in 2 locations:
-     * The **result_wav** folder.
-     * The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
+     &nbsp;If you keep the default setup, the result of this program will be found in 2 locations:
+     &nbsp;&nbsp;* The **result_wav** folder.
+     &nbsp;&nbsp;* The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
    <br>
    
    **Sample command in Google Colab:** 
-   ```
+   &nbsp;```
    python3 main.py --huggingface_token "hf_1234567890" \
                  --IDpath "../ids.txt" \
                  --skip_title "['[Music]', '[Podcast]']" \
