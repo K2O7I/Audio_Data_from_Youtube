@@ -38,6 +38,7 @@ class audio_auto_crawling:
                reverse_skip=False,
                return_total_duration=True,
                language='vietnamese',
+               ffmpeg_location='/usr/bin/ffmpeg',
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
     self.raw_audio_save_path=raw_audio_save_path # raw Audio save Path
@@ -56,6 +57,7 @@ class audio_auto_crawling:
     self.encoding="utf-8" # Encoding for writting file
     self.min_duration=0.1 # Skip if audio duration shorter than min duration
     self.min_merge_allow=1.0 # Merge audio with the next one if audio duration shorter than min_merge_allow
+    self.ffmpeg_location=ffmpeg_location
 
   def video_download(self, 
                      id):
@@ -90,7 +92,7 @@ class audio_auto_crawling:
             'preferredquality': '192',
         }],
         'geobypass':True,
-        'ffmpeg_location':'/usr/bin/ffmpeg'
+        'ffmpeg_location': self.ffmpeg_location
   }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
