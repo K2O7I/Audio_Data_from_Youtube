@@ -40,7 +40,7 @@
    <br>
    
    **Sample command in Google Colab:** 
-   &nbsp;```
+   ```
    python3 main.py --huggingface_token "hf_1234567890" \
                  --IDpath "../ids.txt" \
                  --skip_title "['[Music]', '[Podcast]']" \
