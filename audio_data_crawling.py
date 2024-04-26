@@ -25,13 +25,13 @@ class audio_auto_crawling:
   '''
     Audio Book Data Crawling from Youtube for Automatic Speech Recognition (ASR) task.
       author: Nguyen Minh Quan
-    Version 1.0.0
+    Version 1.0.1
   '''
 
   def __init__(self, 
                huggingface_token, 
                source_website="https://www.youtube.com/watch?v={}", 
-               raw_audio_save_path='/raws/',
+               raw_audio_save_path='raws/',
                result_caption_path='caption.txt',
                result_audio_folder='./result_wav',
                skip_title=[],
@@ -76,7 +76,7 @@ class audio_auto_crawling:
         if not all([True if item in video_title else False for item in self.skip_title]): return ''
     video_name = re.sub('[\\\\/*?:"<>|]', '', video_title)
     name = video_name
-    return_path = f'/{path}/{id}'
+    return_path = f'{path}/{id}'
     ydl_opts = {
       'format': 'm4a/bestaudio/best',
         'quiet': True,
