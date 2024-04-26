@@ -58,6 +58,6 @@
 6. **Reference.**
    * OpenAI/[Whisper-Large-v3](https://huggingface.co/openai/whisper-large-v3).
    * Pyannote/[Segmentation 3.0](https://huggingface.co/pyannote/segmentation-3.0).
-   * Deezer/[Ppleeter](https://github.com/deezer/spleeter/tree/master).
+   * Deezer/[Spleeter](https://github.com/deezer/spleeter/tree/master).
    * [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
