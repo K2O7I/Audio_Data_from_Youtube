@@ -383,7 +383,7 @@ class audio_auto_crawling:
             duration_count+=float(start_dur)
           # Case 2: Final portion.
           else: 
-            start_dur, end_dur=self.data_generation_process(idx_list[i], "temp_audio_cut.wav", duration_count)
+            self.data_generation_process(idx_list[i], "temp_audio_cut.wav", duration_count)
             break
 
     logging.info(f'Got {len(os.listdir(self.result_audio_folder))} samples'+'.' if not self.return_total_duration else f' with {self.count_duration/60/60} hours.')
