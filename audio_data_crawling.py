@@ -301,28 +301,32 @@ class audio_auto_crawling:
     previous_start_dur=-1.0
     previous_end_dur=-1.0
     for i in range(len(timestamp)-skip_last_segment):
-      start, end, _ =timestamp[i].split() # Get start, end time of segment
-      dur=float(end)-float(start)
-      if self.min_duration>=dur: continue
-      # count total duration.
-      if self.return_total_duration: self.count_duration+=dur
-      if dur<self.min_merge_allow:
-        previous_start_dur=float(start)
-        previous_end_dur=float(end)
+      try:
+        start, end, _ =timestamp[i].split() # Get start, end time of segment
+        dur=float(end)-float(start)
+        if self.min_duration>=dur: continue
+        # count total duration.
+        if self.return_total_duration: self.count_duration+=dur
+        if dur<self.min_merge_allow:
+          previous_start_dur=float(start)
+          previous_end_dur=float(end)
+          continue
+        # save path
+        return_path=self.result_audio_folder+f'/{idx}'+'['+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}].wav'
+        # audio spliting
+        self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
+        
+        if previous_start_dur>-1:
+          self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
+          previous_end_dur=-1
+          previous_start_dur=-1
+          self.concatenate_audio('short_temp.wav', return_path, return_path)
+        # write caption
+        audio_content=self.get_caption(return_path)
+        self.write_caption(return_path, audio_content)
+      except: 
+        logging.critical(f"There is an unexpected error oscur\t--> Skip current segment")
         continue
-      # save path
-      return_path=self.result_audio_folder+f'/{idx}'+'['+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}].wav'
-      # audio spliting
-      self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
-      
-      if previous_start_dur>-1:
-        self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
-        previous_end_dur=-1
-        previous_start_dur=-1
-        self.concatenate_audio('short_temp.wav', return_path, return_path)
-      # write caption
-      audio_content=self.get_caption(return_path)
-      self.write_caption(return_path, audio_content)
     if skip_last_segment:
       return  timestamp[-1].split()[:2]
     return start, end
