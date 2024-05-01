@@ -297,6 +297,7 @@ class audio_auto_crawling:
     #for turn, _, speaker in segmentation.itertracks(yield_label=True):
     # start, end = get_time(turn)
     timestamp=segmentation.to_lab().split('\n')[:-1]
+    if len(timestamp)==0: return None
     # merge audio if it short than `min_merge_allow`
     previous_start_dur=-1.0
     previous_end_dur=-1.0
