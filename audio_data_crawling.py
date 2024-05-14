@@ -169,6 +169,7 @@ class audio_auto_crawling:
         tokenizer=processor.tokenizer,
         feature_extractor=processor.feature_extractor,
         max_new_tokens=128,
+        stride_length_s=30,
         chunk_length_s=30,
         batch_size=16,
         return_timestamps=True,
