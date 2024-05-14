@@ -75,7 +75,7 @@ class audio_auto_crawling:
       if self.reverse_skip:
         if not any([True if item in video_title else False for item in self.skip_title]): return ''
       else: 
-        if not all([True if item in video_title else False for item in self.skip_title]): return ''
+        if any([True if item in video_title else False for item in self.skip_title]): return ''
     video_name = re.sub('[\\\\/*?:"<>|]', '', video_title)
     name = video_name
     return_path = f'{path}/{id}'
