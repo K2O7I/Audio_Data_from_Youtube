@@ -58,6 +58,9 @@ class audio_auto_crawling:
     self.min_duration=0.1 # Skip if audio duration shorter than min duration
     self.min_merge_allow=1.0 # Merge audio with the next one if audio duration shorter than min_merge_allow
     self.ffmpeg_location=ffmpeg_location
+    self.split_model_run=False
+    self.multiprocess_running=False
+    self.gpu_device_count=torch.cuda.device_count()
 
   def video_download(self, 
                      id):
@@ -151,7 +154,10 @@ class audio_auto_crawling:
       "min_duration_off": 0.0,
     }
     pipelineA.instantiate(HYPER_PARAMETERS)
-    pipelineA.to(torch.device(self.device))
+    if self.gpu_device_count > 1 and split_model_run:
+        pipelineA.to(torch.device(self.device+':1'))
+    else:
+        pipelineA.to(torch.device(self.device))
     self.audio_segmentation_pipeline=pipelineA
 
     # Download Whisper-v3
