@@ -25,15 +25,24 @@
    &nbsp;`git clone https://github.com/K2O7I/Audio_Data_from_Youtube.git`
    - Step 3: \
    &nbsp;`cd Audio_Data_from_Youtube`
-   - Step 4:\
-   &nbsp;`pip install -r requirements.txt`<br>`pip install tensorflow==2.15.0`  
-   - Step 5:\
-   &nbsp;Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
-   - Step 6:\
-   &nbsp;Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
-   - Step 7:\
-    &nbsp;`python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt> --ffmpeg_location "<ffmpeg_Location>"`
+   - Step 4: \
+   &nbsp;`git clone -b v2.4 https://github.com/jarredou/MVSEP-MDX23-Colab_v2  &> /dev/null`
+   - Step 5: \
+   &nbsp;`cd MVSEP-MDX23-Colab_v2`
+   - Step 6: \
+   &nbsp;`pip install -r requirements.txt &> /dev/null`
+   &nbsp;`python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ort-cuda-12-nightly/pypi/simple/  &> /dev/null`
+   - Step 7: \
+   &nbsp;`cd ..`
    - Step 8:\
+   &nbsp;`pip install -r requirements.txt`<br>`pip install tensorflow==2.15.0`  
+   - Step 9:\
+   &nbsp;Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
+   - Step 10:\
+   &nbsp;Accept the [Pyannote policy](https://huggingface.co/pyannote/segmentation-3.0) with your Huggingface account.
+   - Step 11:\
+    &nbsp;`python3 main.py ----huggingface_token <YOUR_HF_TOKEN> --IDpath <./videoID.txt> --ffmpeg_location "<ffmpeg_Location>"`
+   - Step 12:\
      &nbsp;If you keep the default setup, the result of this program will be found in 2 locations:
      &nbsp;&nbsp;* The **result_wav** folder.
      &nbsp;&nbsp;* The **caption.txt** text file. <br>--> This text file store video caption by this template: *<VIDEO_NAME>|<VIDEO_CAPTION>*.
@@ -60,4 +69,8 @@
    * Pyannote/[Segmentation 3.0](https://huggingface.co/pyannote/segmentation-3.0).
    * Deezer/[Spleeter](https://github.com/deezer/spleeter/tree/master).
    * [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+   * [MVSEP](https://github.com/ZFTurbo/MVSEP-MDX23-music-separation-model)
+   * [DeepFilterNet](https://github.com/Rikorose/DeepFilterNet)
+7. **Knowledge Reference**
+   * [viVoice](https://github.com/thinhlpg/viVoice)
 
