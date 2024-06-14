@@ -6,6 +6,8 @@ import torchaudio
 import soundfile as sf
 import numpy as np
 import torch
+import shutil
+########################################################################
 
 class audioDenoise:
   '''
@@ -21,11 +23,18 @@ class audioDenoise:
     self.use_deepfiller3=use_deepfiller3
 
     def spleeter_phrase(self, audio_path, output_folder):
+      '''
+        Call spleeter Model to denoising
+      '''
+
       file_name=os.path.basename(audio_path)
       subprocess.run(["spleeter", "separate", "-o", output_folder, audio_path])
       return output_folder+f'{file_name}/vocals.wav'
     
     def mvSEP_phrase(self, input_path, output_folder):
+      '''
+        MVSEP Model for denoising
+      '''  
       command = [
         'python', './MVSEP-MDX23-Colab_v2/inference.py',
         '--input_audio', input_path,
@@ -56,6 +65,9 @@ class audioDenoise:
       return output_folder+'/audio_vocals.wav'
 
     def deepfiller_phrase(self, audio_path, save_path):
+      '''
+        Call Deepfiller v3 to enhance voice in audio
+      '''
       model, df_state, _ = init_df()
       audio, _ = load_audio(audio_path, sr=df_state.sr())
       enhanced = enhance(model, df_state, audio)
@@ -63,6 +75,9 @@ class audioDenoise:
       return save_path
     
     def resampling_rate_phrase(self, audio_path, save_path, max_seconds=60000):
+      '''
+        Resampling audio
+      '''
       batch = {"file": audio_path}
       speech_array, sampling_rate = torchaudio.load(batch["file"])
       if sampling_rate != self.output_sampling_rate:
@@ -75,14 +90,31 @@ class audioDenoise:
       sf.write(save_path, speech_array.numpy(), samplerate=self.output_sampling_rate)
       return save_path
     
-    def denoise(audio_path):
+    def clear_temporaty_folder(self, folder_path):
+      '''
+        Clear temp model
+      '''      
+      if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
+
+    def denoise(self, audio_path):
+      '''
+        Main function
+      '''
       clear_audio_path=audio_path
       if self.use_spleeter: clear_audio_path=self.spleeter_phrase(clear_audio_path, './spleeterClear')
 
       if self.use_MVSEP: 
-        if torch.cuda.device_count()<1: print('NO CUDA FOUND--> SKIP MVSEP phrase')
+        if torch.cuda.device_count()<1: 
+          print('NO CUDA FOUND--> SKIP MVSEP phrase')
         else: clear_audio_path=self.mvSEP_phrase(clear_audio_path, './MVSEPCLear')
 
       if self.use_deepfiller3: clear_audio_path=self.deepfiller_phrase(clear_audio_path, 'deepfillerResult.wav')
       self.resampling_rate_phrase(clear_audio_path, 'clearaudio.wav')
+
+      # Clear temp folder 
+      self.clear_temporaty_folder('./spleeterClear')
+      self.clear_temporaty_folder('./MVSEPCLear')
+
       return 'clearaudio.wav'
+
