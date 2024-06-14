@@ -35,7 +35,8 @@
    - Step 7: \
    &nbsp;`cd ..`
    - Step 8:\
-   &nbsp;`pip install -r requirements.txt`<br>`pip install tensorflow==2.15.0`  
+   &nbsp;`pip install -r requirements.txt`<br>
+   &nbsp;`pip install tensorflow==2.15.0`  
    - Step 9:\
    &nbsp;Get your *[Huggingface tokens](https://huggingface.co/settings/tokens)*.
    - Step 10:\
