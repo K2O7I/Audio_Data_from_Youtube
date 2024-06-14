@@ -7,6 +7,8 @@ import soundfile as sf
 import numpy as np
 import torch
 import shutil
+import warnings
+warnings.filterwarnings("ignore")
 ########################################################################
 
 class audioDenoise:
@@ -21,6 +23,7 @@ class audioDenoise:
     self.use_spleeter=use_spleeter
     self.use_MVSEP=use_MVSEP
     self.use_deepfiller3=use_deepfiller3
+    self.df_model, self.df_state, _ = init_df(log_level="None", log_file=None)
 
     def spleeter_phrase(self, audio_path, output_folder):
       '''
@@ -68,10 +71,10 @@ class audioDenoise:
       '''
         Call Deepfiller v3 to enhance voice in audio
       '''
-      model, df_state, _ = init_df()
-      audio, _ = load_audio(audio_path, sr=df_state.sr())
-      enhanced = enhance(model, df_state, audio)
-      save_audio(save_path, enhanced, df_state.sr())
+      #model, df_state, _ = init_df()
+      audio, _ = load_audio(audio_path, sr=self.df_state.sr())
+      enhanced = enhance(self.df_model, self.df_state, audio)
+      save_audio(save_path, enhanced, self.df_state.sr())
       return save_path
     
     def resampling_rate_phrase(self, audio_path, save_path, max_seconds=60000):
