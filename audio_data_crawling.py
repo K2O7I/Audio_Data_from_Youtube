@@ -226,7 +226,7 @@ class audio_auto_crawling:
     '''
       The function to clear background noise
     '''
-    return denoise(current_audio_path)
+    return self.denoiseProcess.denoise(current_audio_path)
     
   def blank_audio(self, duration, channel=2, sampwidth=2, save_path="blank.wav"):
     '''
