@@ -39,10 +39,10 @@ class audio_auto_crawling:
                reverse_skip=False,
                return_total_duration=True,
                language='vietnamese',
-               ffmpeg_location='/usr/bin/ffmpeg',
                use_spleeter=True, 
                use_MVSEP=False,
                use_deepfiller3=False,
+               ffmpeg_location='/usr/bin/ffmpeg',
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
     self.raw_audio_save_path=raw_audio_save_path # raw Audio save Path
