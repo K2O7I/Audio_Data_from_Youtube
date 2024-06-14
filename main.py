@@ -13,6 +13,9 @@ def main():
   parser.add_argument('--language', type=str, default="vietnamese", help='Language for ASR model')
   parser.add_argument('--IDpath', type=str, default="./", help='text file contain audio ID')
   parser.add_argument('--ffmpeg_location', type=str, default="/usr/bin/ffmpeg", help='ffmpeg for yt_dlp')
+  parser.add_argument('--use_spleeter', type=bool, default=True, help='Using Spleeter to remove music background')
+  parser.add_argument('--use_MVSEP', type=bool, default=False, help='Using MVSEP to remove music background')
+  parser.add_argument('--use_deepfiller3', type=bool, default=False, help='Using deepfiller3 to enhance audio quality')
   args = parser.parse_args()
 
   run=audio_auto_crawling(               
@@ -24,7 +27,11 @@ def main():
                list(eval(args.skip_title)),
                args.reverse_skip,
                args.return_total_duration,
-               args.language)
+               args.language,
+               args.use_spleeter,
+               args.use_MVSEP,
+               args.use_deepfiller3
+              )
   
   run.generate(args.IDpath)
 
