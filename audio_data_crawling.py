@@ -18,6 +18,7 @@ import subprocess
 import shutil
 import torch
 import logging
+from audioDenoise import denoise
 ##################################################################################
 
 class audio_auto_crawling:
@@ -211,23 +212,11 @@ class audio_auto_crawling:
     return librosa.get_duration(filename=audio_path)
 
   # clear background noise of audio by spleeter.
-  def clear_background_noise(self, audio_name, current_audio_path, clear_path='clear/'):
+  def clear_background_noise(self, current_audio_path):
     '''
-      The function to clear background noise by Spleeter
+      The function to clear background noise
     '''
-    # Run spleeter
-    subprocess.run(["spleeter", "separate", "-o", clear_path, current_audio_path])
-    # copy Vocal file
-    if current_audio_path=="temp_audio_cut.wav":
-      self.sampling_rate_converter(clear_path+f'temp_audio_cut/vocals.wav',
-                                  clear_path+'temp.wav')
-    else:
-      self.sampling_rate_converter(clear_path+f'{audio_name}/vocals.wav',
-                                  clear_path+'temp.wav')
-    # Delete spleeter folder 
-    if os.path.exists(clear_path+f'{audio_name}'):
-      shutil.rmtree(clear_path+f'{audio_name}')
-    return clear_path+'temp.wav'
+    return denoise(current_audio_path)
     
   def blank_audio(self, duration, channel=2, sampwidth=2, save_path="blank.wav"):
     '''
@@ -299,7 +288,7 @@ class audio_auto_crawling:
       The function to generate every data sample. 
     '''
     
-    temp_audio_path=self.clear_background_noise(idx, current_audio_path)
+    temp_audio_path=self.clear_background_noise(current_audio_path)
     segmentation=self.audio_segmentation(temp_audio_path)
     #for turn, _, speaker in segmentation.itertracks(yield_label=True):
     # start, end = get_time(turn)
