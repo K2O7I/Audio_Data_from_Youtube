@@ -8,3 +8,4 @@ spleeter==2.4.0
 transformers==4.40.0
 accelerate==0.29.3
 pyannote.audio==3.1.1
+deepfilternet==0.5.6
