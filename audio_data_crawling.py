@@ -162,7 +162,7 @@ class audio_auto_crawling:
       "min_duration_off": 0.0,
     }
     pipelineA.instantiate(HYPER_PARAMETERS)
-    if self.gpu_device_count > 1 and split_model_run:
+    if self.gpu_device_count > 1 and self.split_model_run:
         pipelineA.to(torch.device(self.device+':1'))
     else:
         pipelineA.to(torch.device(self.device))
