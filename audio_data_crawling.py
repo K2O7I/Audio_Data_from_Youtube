@@ -184,7 +184,7 @@ class audio_auto_crawling:
         feature_extractor=processor.feature_extractor,
         max_new_tokens=128,
         stride_length_s=30,
-        chunk_length_s=30,
+        chunk_length_s=40,
         batch_size=16,
         return_timestamps=True,
         torch_dtype=torch_dtype,
