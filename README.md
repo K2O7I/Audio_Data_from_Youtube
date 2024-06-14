@@ -30,7 +30,7 @@
    - Step 5: \
    &nbsp;`cd MVSEP-MDX23-Colab_v2`
    - Step 6: \
-   &nbsp;`pip install -r requirements.txt &> /dev/null`
+   &nbsp;`pip install -r requirements.txt &> /dev/null` <br>
    &nbsp;`python -m pip install ort-nightly-gpu --index-url=https://aiinfra.pkgs.visualstudio.com/PublicPackages/_packaging/ort-cuda-12-nightly/pypi/simple/  &> /dev/null`
    - Step 7: \
    &nbsp;`cd ..`
