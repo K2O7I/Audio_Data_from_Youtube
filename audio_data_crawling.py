@@ -18,7 +18,7 @@ import subprocess
 import shutil
 import torch
 import logging
-from audioDenoise import denoise
+from audioDenoise import audioDenoise
 ##################################################################################
 
 class audio_auto_crawling:
@@ -40,6 +40,9 @@ class audio_auto_crawling:
                return_total_duration=True,
                language='vietnamese',
                ffmpeg_location='/usr/bin/ffmpeg',
+               use_spleeter=True, 
+               use_MVSEP=False,
+               use_deepfiller3=False,
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
     self.raw_audio_save_path=raw_audio_save_path # raw Audio save Path
@@ -50,6 +53,7 @@ class audio_auto_crawling:
     self.default_sampling_rate=16000 # Defalut Audio sampling rate 
     self.audio_segmentation_pipeline=None
     self.audio_caption_pipeline=None
+    self.denoiseProcess=None
     self.result_caption_path=result_caption_path # Text file path to store audio caption
     self.result_audio_folder=result_audio_folder # Folder Path to store Audio
     self.language=language # Main language for Whisper.
@@ -61,6 +65,9 @@ class audio_auto_crawling:
     self.ffmpeg_location=ffmpeg_location
     self.split_model_run=False
     self.multiprocess_running=False
+    self.use_spleeter=use_spleeter
+    self.use_MVSEP=use_MVSEP
+    self.use_deepfiller3=use_deepfiller3
     self.gpu_device_count=torch.cuda.device_count()
 
   def video_download(self, 
@@ -191,6 +198,9 @@ class audio_auto_crawling:
     if not os.path.exists(self.result_audio_folder):
       os.mkdir(self.result_audio_folder)
 
+    # Init create denoise process
+    self.denoiseProcess = audioDenoise(self.use_spleeter, self.use_MVSEP, self.use_deepfiller3, self.default_sampling_rate)
+  
   # Convert audio sampling rate to default 
   def sampling_rate_converter(self, 
                               path, 
