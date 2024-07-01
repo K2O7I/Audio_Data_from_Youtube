@@ -29,9 +29,9 @@ class audio_auto_crawling:
     Version 1.0.1
   '''
 
-  def __init__(self, 
-               huggingface_token, 
-               source_website="https://www.youtube.com/watch?v={}", 
+  def __init__(self,
+               huggingface_token,
+               source_website="https://www.youtube.com/watch?v={}",
                raw_audio_save_path='raws/',
                result_caption_path='caption.txt',
                result_audio_folder='./result_wav',
@@ -39,7 +39,7 @@ class audio_auto_crawling:
                reverse_skip=False,
                return_total_duration=True,
                language='vietnamese',
-               use_spleeter=True, 
+               use_spleeter=True,
                use_MVSEP=False,
                use_deepfiller3=False,
                ffmpeg_location='/usr/bin/ffmpeg',
@@ -50,7 +50,7 @@ class audio_auto_crawling:
     self.reverse_skip=reverse_skip # Skip Audio if title not contant skip_title: [...]
     self.device ="cuda" if torch.cuda.is_available() else "cpu"
     self.huggingface_token=huggingface_token # Huggingface token to use Pyannote Segmentation
-    self.default_sampling_rate=16000 # Defalut Audio sampling rate 
+    self.default_sampling_rate=16000 # Defalut Audio sampling rate
     self.audio_segmentation_pipeline=None
     self.audio_caption_pipeline=None
     self.denoiseProcess=None
@@ -65,16 +65,27 @@ class audio_auto_crawling:
     self.ffmpeg_location=ffmpeg_location
     self.split_model_run=False
     self.multiprocess_running=False
+    # Audio Enhance
     self.use_spleeter=use_spleeter
     self.use_MVSEP=use_MVSEP
     self.use_deepfiller3=use_deepfiller3
+    # Count CUDA device
     self.gpu_device_count=torch.cuda.device_count()
+    # Task ID
+    self.task_id=0 # 0: Text-to-Speech / 1: ASR
+    # API Option for labeling
+    '''
+    Priority Groq > Local Run
+    Run if API not null
+    '''
+    self.groq_API_key=None
 
-  def video_download(self, 
+
+  def video_download(self,
                      id):
 
     '''
-      The function to download video from Youtube by its ID.    
+      The function to download video from Youtube by its ID.
     '''
     url=self.website_format.format(id)
     path=self.raw_audio_save_path
@@ -85,7 +96,7 @@ class audio_auto_crawling:
     if len(self.skip_title):
       if self.reverse_skip:
         if not any([True if item in video_title else False for item in self.skip_title]): return ''
-      else: 
+      else:
         if any([True if item in video_title else False for item in self.skip_title]): return ''
     video_name = re.sub('[\\\\/*?:"<>|]', '', video_title)
     name = video_name
@@ -110,12 +121,12 @@ class audio_auto_crawling:
         error_code = ydl.download(url)
     return return_path+'.wav'
 
-  def audio_spliting(self, 
-                     audio_path, 
-                     start, 
-                     end, 
+  def audio_spliting(self,
+                     audio_path,
+                     start,
+                     end,
                      tgt_path):
-    
+
     '''
       The function to cut audio.
     '''
@@ -183,7 +194,7 @@ class audio_auto_crawling:
         tokenizer=processor.tokenizer,
         feature_extractor=processor.feature_extractor,
         max_new_tokens=128,
-        stride_length_s=30,
+        #stride_length_s,
         chunk_length_s=40,
         batch_size=16,
         return_timestamps=True,
@@ -199,13 +210,17 @@ class audio_auto_crawling:
       os.mkdir(self.result_audio_folder)
 
     # Init create denoise process
+    print(self.use_spleeter, self.use_MVSEP, self.use_deepfiller3, self.default_sampling_rate)
     self.denoiseProcess = audioDenoise(self.use_spleeter, self.use_MVSEP, self.use_deepfiller3, self.default_sampling_rate)
-  
-  # Convert audio sampling rate to default 
-  def sampling_rate_converter(self, 
-                              path, 
-                              save_temp_path, 
-                              max_seconds=60000):
+    if self.groq_API_key:
+      # self.Groq_client = Groq(api_key=self.groq_API_key)
+      self.API_ID_Count=0
+
+  # Convert audio sampling rate to default
+  def sampling_rate_converter(self,
+                              path,
+                              save_temp_path,
+                              max_seconds=600):
     batch = {"file": path}
     speech_array, sampling_rate = torchaudio.load(batch["file"])
     if sampling_rate != self.default_sampling_rate:
@@ -227,7 +242,7 @@ class audio_auto_crawling:
       The function to clear background noise
     '''
     return self.denoiseProcess.denoise(current_audio_path)
-    
+
   def blank_audio(self, duration, channel=2, sampwidth=2, save_path="blank.wav"):
     '''
       Create blank audio
@@ -240,7 +255,7 @@ class audio_auto_crawling:
       f.setframerate(self.default_sampling_rate)
       f.writeframes(audio)
     return save_path
-    
+
   def concatenate_audio(self, first_audio_path, second_audio_path, return_path, blank_duration=0.3):
     blank_audio_path = self.blank_audio(blank_duration)
     infiles=[first_audio_path, blank_audio_path, second_audio_path]
@@ -254,7 +269,7 @@ class audio_auto_crawling:
     for i in range(len(wave_list)):
         output.writeframes(wave_list[i][1])
     output.close()
-      
+
   def get_time(self, text):
     pattern = r'\[\s*(\d{2}:\d{2}:\d{2}\.\d+)\s*-->\s*(\d{2}:\d{2}:\d{2}\.\d+)\]'
     match = re.search(pattern, text)
@@ -263,23 +278,43 @@ class audio_auto_crawling:
       end_time = match.group(2)
     return self.to_seconds(start_time), self.to_seconds(end_time)
 
-  def audio_segmentation(self, 
+  def audio_segmentation(self,
                          audio_path):
     '''
       Get audio segmentation list by Pyannote Segmentation 3.0
     '''
     return self.audio_segmentation_pipeline(audio_path)
 
-  def get_caption(self, 
+  def get_caption(self,
                   audio_path):
     '''
     Get audio caption by Whisper v3.
     '''
-    caption=self.audio_caption_pipeline(audio_path, generate_kwargs={"language": self.language})
+    if self.groq_API_key:
+      try:
+        api=self.groq_API_key[self.API_ID_Count]
+        groq_client = Groq(api_key=api)
+        with open(audio_path, "rb") as file:
+          transcription = groq_client.audio.transcriptions.create(
+          file=(audio_path, file.read()),
+          model="whisper-large-v3",
+          prompt="Specify context or spelling",  # Optional
+          response_format="json",  # Optional
+          language=self.language[:2],  # Optional
+          temperature=0.0  # Optional
+        )
+        caption=transcription.text
+      except:
+        print("No response from API\t\t\t--->   Switch to Local running")
+        caption=self.audio_caption_pipeline(audio_path, generate_kwargs={"language": self.language})
+    else:
+      try:
+        caption=self.audio_caption_pipeline(audio_path, generate_kwargs={"language": self.language})
+      except: raise Exception("Fail Whisper running!")
     return caption['text']
 
-  def write_caption(self, 
-                    audio_path, 
+  def write_caption(self,
+                    audio_path,
                     content):
     '''
       Write caption to txt file
@@ -289,15 +324,15 @@ class audio_auto_crawling:
     f.write(f"\n{audio_path}"+"|"+f"{content}")
     f.close()
 
-  def data_generation_process(self, 
-                              idx, 
-                              current_audio_path, 
+  def data_generation_process(self,
+                              idx,
+                              current_audio_path,
                               segment_start_dur=0.0,
                               skip_last_segment=0):
     '''
-      The function to generate every data sample. 
+      The function to generate every data sample.
     '''
-    
+
     temp_audio_path=self.clear_background_noise(current_audio_path)
     segmentation=self.audio_segmentation(temp_audio_path)
     #for turn, _, speaker in segmentation.itertracks(yield_label=True):
@@ -322,7 +357,7 @@ class audio_auto_crawling:
         return_path=self.result_audio_folder+f'/{idx}'+'['+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}].wav'
         # audio spliting
         self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
-        
+
         if previous_start_dur>-1:
           self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
           previous_end_dur=-1
@@ -331,7 +366,8 @@ class audio_auto_crawling:
         # write caption
         audio_content=self.get_caption(return_path)
         self.write_caption(return_path, audio_content)
-      except: 
+      except Exception as err:
+        print(err)
         logging.critical(f"There is an unexpected error oscur\t--> Skip current segment")
         continue
     if skip_last_segment:
@@ -340,7 +376,7 @@ class audio_auto_crawling:
 
 
   # Main Function.
-  def generate(self, 
+  def generate(self,
            idx_path):
     # Setup download.
     logging.info('Start to setup...')
@@ -348,17 +384,17 @@ class audio_auto_crawling:
       self.init_download()
       if self.return_total_duration: self.count_duration=0
     except Exception as err:
-      logging.error(err) 
+      logging.error(err)
 
     # Open Video Youtube ID.
-    try: 
+    try:
       f=open(idx_path, "r")
       idx_list=f.read().split('\n')
       if not len(idx_list): raise Exception("Found empty Id list!")
       f.close()
     except Exception as err:
       logging.error(err)
-    
+
     logging.info(f'Got {len(idx_list)} ID.\n Start to generate data.')
     for i in tqdm(range(len(idx_list))):
       # Download Audio.
@@ -368,7 +404,7 @@ class audio_auto_crawling:
         continue
 
       # Convert Audio Sampling rate.
-      #if librosa.get_samplerate(current_audio_path)!=self.default_sampling_rate: 
+      #if librosa.get_samplerate(current_audio_path)!=self.default_sampling_rate:
         #self.sampling_rate_converter(current_audio_path, current_audio_path)
       # Get Audio Durration
       current_audio_duration=self.get_duration(current_audio_path)
@@ -382,18 +418,18 @@ class audio_auto_crawling:
         while duration_count<=current_audio_duration:
           dur_cut = duration_count+600.0 # Check durration.
           # check final cutting-portion of audio.
-          if dur_cut>current_audio_duration: 
+          if dur_cut>current_audio_duration:
             dur_cut=current_audio_duration
 
           # Temprary audio file with limit at 600s
           self.audio_spliting(current_audio_path, duration_count, dur_cut, "temp_audio_cut.wav")
-          
+
           # Case 1: Not final portion.
           if dur_cut!=current_audio_duration:
             start_dur, end_dur=self.data_generation_process(idx_list[i], "temp_audio_cut.wav", duration_count, 1)
             duration_count+=float(start_dur)
           # Case 2: Final portion.
-          else: 
+          else:
             self.data_generation_process(idx_list[i], "temp_audio_cut.wav", duration_count)
             break
 
