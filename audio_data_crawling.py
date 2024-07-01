@@ -290,7 +290,8 @@ class audio_auto_crawling:
     '''
     Get audio caption by Whisper v3.
     '''
-    if self.groq_API_key:
+    # Still on work
+    if False:#self.groq_API_key:
       try:
         api=self.groq_API_key[self.API_ID_Count]
         groq_client = Groq(api_key=api)
