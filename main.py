@@ -16,6 +16,7 @@ def main():
   parser.add_argument('--use_spleeter', type=bool, default=True, help='Using Spleeter to remove music background')
   parser.add_argument('--use_MVSEP', type=bool, default=False, help='Using MVSEP to remove music background')
   parser.add_argument('--use_deepfiller3', type=bool, default=False, help='Using deepfiller3 to enhance audio quality')
+  parser.add_argument('--taskID', type=int, default=0, help='Data for T2S: 0 | ASR: 1')
   args = parser.parse_args()
 
   run=audio_auto_crawling(               
@@ -30,7 +31,8 @@ def main():
                args.language,
                args.use_spleeter,
                args.use_MVSEP,
-               args.use_deepfiller3
+               args.use_deepfiller3,
+               args.taskID
               )
   
   run.generate(args.IDpath)
