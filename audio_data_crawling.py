@@ -367,7 +367,7 @@ class audio_auto_crawling:
             previous_start_dur=-1
             self.concatenate_audio('short_temp.wav', return_path, return_path)
 
-        else if self.task_id==1:
+        elif self.task_id==1:
           self.audio_spliting(current_audio_path, float(start), float(end), return_path)
           if previous_start_dur>-1:
             self.audio_spliting(current_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
