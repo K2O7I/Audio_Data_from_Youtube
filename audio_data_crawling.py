@@ -43,7 +43,7 @@ class audio_auto_crawling:
                use_spleeter=True,
                use_MVSEP=False,
                use_deepfiller3=False,
-               task_id,
+               taskID,
                ffmpeg_location='/usr/bin/ffmpeg',
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
@@ -74,7 +74,7 @@ class audio_auto_crawling:
     # Count CUDA device
     self.gpu_device_count=torch.cuda.device_count()
     # Task ID
-    self.task_id=task_id # 0: Text-to-Speech / 1: ASR
+    self.task_id=taskID # 0: Text-to-Speech / 1: ASR
     # API Option for labeling
     '''
     Priority Groq > Local Run
