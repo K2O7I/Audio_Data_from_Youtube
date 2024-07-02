@@ -19,6 +19,7 @@ import shutil
 import torch
 import logging
 from audioDenoise import audioDenoise
+from groq import Groq
 ##################################################################################
 
 class audio_auto_crawling:
@@ -290,8 +291,7 @@ class audio_auto_crawling:
     '''
     Get audio caption by Whisper v3.
     '''
-    # Still on work
-    if False:#self.groq_API_key:
+    if self.groq_API_key:
       try:
         api=self.groq_API_key[self.API_ID_Count]
         groq_client = Groq(api_key=api)
@@ -356,20 +356,29 @@ class audio_auto_crawling:
           continue
         # save path
         return_path=self.result_audio_folder+f'/{idx}'+'['+f'{str(segment_start_dur+float(start)).replace(".", ",")}'+':'+f'{str(segment_start_dur+float(end)).replace(".", ",")}].wav'
-        # audio spliting
-        self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
 
-        if previous_start_dur>-1:
-          self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
-          previous_end_dur=-1
-          previous_start_dur=-1
-          self.concatenate_audio('short_temp.wav', return_path, return_path)
+        # audio spliting
+        if self.task_id==0:
+          self.audio_spliting(temp_audio_path, float(start), float(end), return_path)
+          if previous_start_dur>-1:
+            self.audio_spliting(temp_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
+            previous_end_dur=-1
+            previous_start_dur=-1
+            self.concatenate_audio('short_temp.wav', return_path, return_path)
+
+        else if self.task_id==1:
+          self.audio_spliting(current_audio_path, float(start), float(end), return_path)
+          if previous_start_dur>-1:
+            self.audio_spliting(current_audio_path, previous_start_dur, previous_end_dur, "short_temp.wav")
+            previous_end_dur=-1
+            previous_start_dur=-1
+            self.concatenate_audio('short_temp.wav', return_path, return_path)
         # write caption
         audio_content=self.get_caption(return_path)
         self.write_caption(return_path, audio_content)
       except Exception as err:
-        print(err)
-        logging.critical(f"There is an unexpected error oscur\t--> Skip current segment")
+        #print(err)
+        logging.critical(f"There is an unexpected error occur\t--> Skip current segment")
         continue
     if skip_last_segment:
       return  timestamp[-1].split()[:2]
