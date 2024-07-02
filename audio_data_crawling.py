@@ -117,7 +117,7 @@ class audio_auto_crawling:
         }],
         'geobypass':True,
         'ffmpeg_location': self.ffmpeg_location
-  }
+    }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         error_code = ydl.download(url)
