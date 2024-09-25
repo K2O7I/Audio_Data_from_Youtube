@@ -100,7 +100,7 @@ class audio_auto_crawling:
         if not any([True if item in video_title else False for item in self.skip_title]): return ''
       else:
         if any([True if item in video_title else False for item in self.skip_title]): return ''
-    video_name = re.sub('[\\\\/*?:"<>|]', '', video_title)
+    video_name = re.sub('[\\\\/*?:"<>|]', '', video_title)  
     name = video_name
     return_path = f'{path}/{id}'
     ydl_opts = {
@@ -116,12 +116,15 @@ class audio_auto_crawling:
             'preferredquality': '192',
         }],
         'geobypass':True,
-        'ffmpeg_location': self.ffmpeg_location
+        'extractor-args': "youtube:player_client=ios",
+        'ffmpeg_location': "/usr/bin/ffmpeg"
     }
-
+    #print(ydl_opts)
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        error_code = ydl.download(url)
-    return return_path+'.wav'
+        try:
+            error_code = ydl.download(url)
+            return return_path+'.wav'
+        except: return None
 
   def audio_spliting(self,
                      audio_path,
