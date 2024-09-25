@@ -43,7 +43,7 @@ class audio_auto_crawling:
                use_spleeter=True,
                use_MVSEP=False,
                use_deepfiller3=False,
-               taskID,
+               taskID=0,
                ffmpeg_location='/usr/bin/ffmpeg',
                **kwargs):
     self.website_format = source_website # Source website, such as Youtube... other will be update later!
